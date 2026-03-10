@@ -31,18 +31,26 @@ HashMap.prototype.set = function (key, value) {
     newBucket = Array(this.capacity);
     newBucket = [...this.buckets];
     this.buckets = newBucket;
+    for (let i = this.capacity / 2; i < this.capacity; i++) {
+      let list = new LinkedList();
+      this.buckets[i].push[list];
+    }
   }
   const hashCode = hash(key);
   if (hashCode < 0 || hashCode >= buckets.length) {
     throw new Error("Trying to access index out of bounds");
   }
   const list = this.buckets[hashCode];
-  // need a way to hold key but how?
-  if (list.contains(key)) {
-    const index = list.findIndex(key);
-    list.replace(index, value);
-  } else {
-    list.append(value);
+  // will LL be able to take [k,v] as value rather than int?
+  const flag = false;
+  for (const node of list) {
+    if (node.value[0] === key) {
+      node.value[1] = value;
+      flag = true;
+    }
+  }
+  if (!flag) {
+    list.append([key, value]);
   }
   this.count = this.count + 1;
 };
@@ -53,10 +61,11 @@ HashMap.prototype.get = function (key) {
     throw new Error("Trying to access index out of bounds");
   }
   const list = this.buckets[hashCode];
-  if (list.size() === 0 || !list.contains(key)) return null;
+  if (list.size() === 0) return null;
   for (const node of list) {
-    if (node === key) return node.value;
+    if (node.value[0] === key) return node.value[1];
   }
+  return null;
 };
 
 HashMap.prototype.has = function (key) {
@@ -65,6 +74,72 @@ HashMap.prototype.has = function (key) {
     throw new Error("Trying to access index out of bounds");
   }
   const list = this.buckets[hashCode];
-  if (list.size() === 0 || !list.contains(key)) return false;
-  return true;
+  if (list.size() === 0) return false;
+  for (const node of list) {
+    if (node.value[0] === key) return true;
+  }
+  return false;
+};
+
+HashMap.prototype.remove = function (key) {
+  if (!this.has(key)) return false;
+  const hashCode = hash(key);
+  const list = this.buckets[hashCode];
+  let index = 0;
+  for (const node of list) {
+    if (node.value[0] === key) {
+      list.remove(index);
+    }
+    index = index + 1;
+  }
+  this.count = this.count - 1;
+};
+
+HashMap.prototype.length = function () {
+  return this.count;
+};
+
+HashMap.prototype.clear = function () {
+  buckets = Array(16);
+  this.capacity = 16;
+  for (let i = 0; i < this.capacity; i++) {
+    let list = new LinkedList();
+    this.buckets[i].push(list);
+  }
+};
+
+HashMap.prototype.keys = function () {
+  const keyList = [];
+  for (let i = 0; i < this.capacity; i++) {
+    for (const node of this.buckets[i]) {
+      if (node) {
+        keyList.push(node.value[0]);
+      }
+    }
+  }
+  return keyList;
+};
+
+HashMap.prototype.values = function () {
+  const valueList = [];
+  for (let i = 0; i < this.capacity; i++) {
+    for (const node of this.buckets[i]) {
+      if (node) {
+        valueList.push(node.value[1]);
+      }
+    }
+  }
+  return valueList;
+};
+
+HashMap.prototype.entries = function () {
+  const kpList = [];
+  for (let i = 0; i < this.capacity; i++) {
+    for (const node of this.buckets[i]) {
+      if (node) {
+        kpList.push(node.value);
+      }
+    }
+  }
+  return kpList;
 };
