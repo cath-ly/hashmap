@@ -1,15 +1,14 @@
 const LinkedList = require("../linked-list/LinkedList");
-const Node = require("../linked-list/nodeElement");
 
 function HashMap() {
   // buckets take in LinkedList of ind nodes of each set k-v pair
-  loadFactor = 0.75;
-  capacity = 16;
-  buckets = Array(capacity);
-  count = 0;
-  for (let i = 0; i < buckets.length; i++) {
-    list = new LinkedList();
-    buckets[i].push(list);
+  this.loadFactor = 0.75;
+  this.capacity = 16;
+  this.buckets = Array(this.capacity);
+  this.count = 0;
+  for (let i = 0; i < this.buckets.length; i++) {
+    let list = new LinkedList();
+    this.buckets[i] = list;
   }
 }
 
@@ -33,7 +32,7 @@ HashMap.prototype.set = function (key, value) {
     this.buckets = newBucket;
     for (let i = this.capacity / 2; i < this.capacity; i++) {
       let list = new LinkedList();
-      this.buckets[i].push[list];
+      this.buckets.push(list);
     }
   }
   const hashCode = hash(key);
@@ -143,3 +142,5 @@ HashMap.prototype.entries = function () {
   }
   return kpList;
 };
+
+module.exports = HashMap;
