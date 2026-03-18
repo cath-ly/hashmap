@@ -23,6 +23,7 @@ HashMap.prototype.hash = function (key) {
   return hashCode;
 };
 
+//grab an array and then map 0, 1 as key and value
 HashMap.prototype.set = function (key, value) {
   //for next time implement the node to have two values, key and value => node.value = [key, value]
   if (this.count === Math.ceil(this.loadFactor * this.capacity)) {
@@ -35,28 +36,30 @@ HashMap.prototype.set = function (key, value) {
       this.buckets.push(list);
     }
   }
-  const hashCode = hash(key);
-  if (hashCode < 0 || hashCode >= buckets.length) {
+  const hashCode = this.hash(key);
+  if (hashCode < 0 || hashCode >= this.buckets.length) {
     throw new Error("Trying to access index out of bounds");
   }
   const list = this.buckets[hashCode];
+  if (list.size() === 0) {
+    list.prepend([key, value]);
+    this.count = this.count + 1;
+    return;
+  }
   // will LL be able to take [k,v] as value rather than int?
-  const flag = false;
-  for (const node of list) {
+  for (const node of list.array) {
     if (node.value[0] === key) {
       node.value[1] = value;
-      flag = true;
+      return;
     }
   }
-  if (!flag) {
-    list.append([key, value]);
-  }
+  list.append([key, value]);
   this.count = this.count + 1;
 };
 
 HashMap.prototype.get = function (key) {
   const hashCode = hash(key);
-  if (hashCode < 0 || hashCode >= buckets.length) {
+  if (hashCode < 0 || hashCode >= this.buckets.length) {
     throw new Error("Trying to access index out of bounds");
   }
   const list = this.buckets[hashCode];
