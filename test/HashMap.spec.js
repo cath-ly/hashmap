@@ -44,7 +44,12 @@ describe("HashMap class", () => {
     expect(invalid).toBe(false);
   });
 
-  test("HashMap List remove method is functional", () => {});
+  test("HashMap List remove method is functional", () => {
+    hashM.remove("Key");
+    expect(hashM.length()).toEqual(1);
+    expect(hashM.buckets[15].size()).toEqual(1);
+    expect(hashM.buckets[15].tail().value).toEqual(newPair);
+  });
   test("HashMap List keys method is functional", () => {});
   test("HashMap List values method is functional", () => {});
   test("HashMap List entries method is functional", () => {});
