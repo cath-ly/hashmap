@@ -58,26 +58,26 @@ HashMap.prototype.set = function (key, value) {
 };
 
 HashMap.prototype.get = function (key) {
-  const hashCode = hash(key);
+  const hashCode = this.hash(key);
   if (hashCode < 0 || hashCode >= this.buckets.length) {
     throw new Error("Trying to access index out of bounds");
   }
   const list = this.buckets[hashCode];
   if (list.size() === 0) return null;
-  for (const node of list) {
+  for (const node of list.array) {
     if (node.value[0] === key) return node.value[1];
   }
   return null;
 };
 
 HashMap.prototype.has = function (key) {
-  const hashCode = hash(key);
-  if (hashCode < 0 || hashCode >= buckets.length) {
+  const hashCode = this.hash(key);
+  if (hashCode < 0 || hashCode >= this.buckets.length) {
     throw new Error("Trying to access index out of bounds");
   }
   const list = this.buckets[hashCode];
   if (list.size() === 0) return false;
-  for (const node of list) {
+  for (const node of list.array) {
     if (node.value[0] === key) return true;
   }
   return false;
@@ -85,10 +85,10 @@ HashMap.prototype.has = function (key) {
 
 HashMap.prototype.remove = function (key) {
   if (!this.has(key)) return false;
-  const hashCode = hash(key);
+  const hashCode = this.hash(key);
   const list = this.buckets[hashCode];
   let index = 0;
-  for (const node of list) {
+  for (const node of list.array) {
     if (node.value[0] === key) {
       list.remove(index);
     }

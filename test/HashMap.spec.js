@@ -6,7 +6,7 @@ describe("HashMap class", () => {
   const newPair = ["key", "newValue"];
   test("HashMap instance is functional", () => {
     expect(hashM.capacity).toEqual(hashM.buckets.length);
-    expect(hashM.count).toEqual(0);
+    expect(hashM.length()).toEqual(0);
   });
 
   test("HashMap hash method are functional", () => {
@@ -15,21 +15,38 @@ describe("HashMap class", () => {
 
   test("HashMap set method are functional", () => {
     hashM.set(kvPair[0], kvPair[1]);
-    expect(hashM.count).toEqual(1);
+    expect(hashM.length()).toEqual(1);
     expect(hashM.buckets[15].size()).toEqual(1);
     expect(hashM.buckets[15].head().value).toEqual(kvPair);
 
     hashM.set(newPair[0], newPair[1]);
-    expect(hashM.count).toEqual(1);
+    expect(hashM.length()).toEqual(1);
     expect(hashM.buckets[15].size()).toEqual(1);
     expect(hashM.buckets[15].head().value).toEqual(newPair);
 
     hashM.set("Key", "value");
-    expect(hashM.count).toEqual(2);
+    expect(hashM.length()).toEqual(2);
+    expect(hashM.buckets[15].size()).toEqual(2);
     expect(hashM.buckets[15].tail().value).toEqual(["Key", "value"]);
   });
 
-  test("HashMap List toString method is functional", () => {});
+  test("HashMap List get method is functional", () => {
+    const key = hashM.get("key");
+    const invalid = hashM.get("noKey");
+    expect(key).toMatch("newValue");
+    expect(invalid).toBe(null);
+  });
 
-  test("HashMap List pop method is functional", () => {});
+  test("HashMap List has method is functional", () => {
+    const key = hashM.has("key");
+    const invalid = hashM.has("noKey");
+    expect(key).toBe(true);
+    expect(invalid).toBe(false);
+  });
+
+  test("HashMap List remove method is functional", () => {});
+  test("HashMap List keys method is functional", () => {});
+  test("HashMap List values method is functional", () => {});
+  test("HashMap List entries method is functional", () => {});
+  test("HashMap List clear method is functional", () => {});
 });
